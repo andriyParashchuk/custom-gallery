@@ -1,19 +1,22 @@
 import React, {Component} from 'react';
 import {StackNavigator} from 'react-navigation';
 import Gallery from './components/gallery';
-import GalleryDetail from './components/galleryDetail';
+import Detail from './components/detail';
 
 const Routes = StackNavigator({
   Gallery: {
     screen: Gallery,
     navigationOptions: {
       title: 'Gallery',
+      headerTitleStyle: {
+        alignSelf: 'center'
+      }
     }
   },
-  GalleryDetail: {
-    screen: GalleryDetail,
+  Detail: {
+    screen: Detail,
     navigationOptions: {
-      title: 'Detail',
+      title: 'Detail'
     }
   }
 });

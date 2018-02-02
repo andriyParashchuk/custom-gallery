@@ -1,97 +1,103 @@
 import React, {Component} from 'react';
-import {StyleSheet, ActivityIndicator, ListView, TouchableHighlight, Text, View , Image} from 'react-native';
+import {StyleSheet, ActivityIndicator, ListView, TouchableOpacity, Text, View , Image} from 'react-native';
+import {connect} from 'react-redux';
+import {fetchData} from '../actions/fetchData';
 
 class Gallery extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true
-    };
-  }
-
   componentDidMount() {
-    return fetch('https://api.500px.com/v1/photos?feature=popular&consumer_key=wB4ozJxTijCwNuggJvPGtBGCRqaZVcF6jsrzUadF')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-          isLoading: false,
-          dataSource: ds.cloneWithRows(responseJson.photos),
-        });
-      }).catch((error) => {
-        console.error(error);
-      });
+    this.props.fetchData('https://api.500px.com/v1/photos?feature=popular&consumer_key=wB4ozJxTijCwNuggJvPGtBGCRqaZVcF6jsrzUadF');
   }
 
-  onButtonPress(user) {
-    this.props.navigation.navigate('GalleryDetail', user);
+  onClick(item) {
+    this.props.navigation.navigate('Detail', item);
   }
 
-  GalleryList(user){
+  getItem(item){
     return (
-      <TouchableHighlight
-        style={styles.galleryItem}
-        onPress={() => this.onButtonPress(user)}>
-        <View style={styles.figure}>
-          <Image style={styles.img} source={{uri: user.user.userpic_url}} />
-          <View style={styles.text}>
-            <Text style={styles.name}>{user.name.toUpperCase()}</Text>
-            <Text style={styles.author}>{user.user.fullname}</Text>
-          </View>
+      <TouchableOpacity
+        style={styles.gallery_item}
+        onPress={() => this.onClick(item)}>
+        <Image style={styles.gallery_img} source={{uri: item.user.userpic_url}}/>
+        <View style={styles.gallery_text}>
+          <Text style={styles.gallery_title}>{item.name.toUpperCase()}</Text>
+          <Text style={styles.gallery_author}>{item.user.fullname}</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return (
         <View style={styles.loader}>
           <ActivityIndicator />
         </View>
-      );
+      )
     }
-
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(user) => this.GalleryList(user)}
-      />
-    );
+      <View style={styles.gallery_wrapper}>
+        <ListView
+          enableEmptySections={true}
+          dataSource={this.props.dataSource}
+          renderRow={(item) => this.getItem(item)}
+        />
+      </View>
+    )
   }
 }
 
+const dataSource = new ListView.DataSource({
+  rowHasChanged: (r1, r2) => r1 !== r2
+});
+
+const mapStateToProps = (state) => {
+  return {
+    dataSource: dataSource.cloneWithRows(state.fetchData),
+    hasErrored: state.fetchHasErrored,
+    isLoading: state.fetchIsLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (url) => dispatch(fetchData(url))
+  };
+};
+
 const styles = StyleSheet.create({
-  galleryItem: {
-    marginBottom: 30
-  },
-  figure: {
+  gallery_wrapper: {
     flex: 1,
-    flexDirection: 'row'
+    backgroundColor: '#fff',
+    paddingLeft: 15,
+    paddingTop: 15
   },
-  img: {
+  gallery_item: {
+    flexDirection: 'row',
+    marginBottom: 15
+  },
+  gallery_img: {
     width: '50%',
     height: 150
   },
-  text: {
+  gallery_text: {
     width: '50%',
     justifyContent: 'center',
-    padding: 15
+    paddingHorizontal: 15,
   },
-  name: {
+  gallery_title: {
     color: '#333',
-    fontSize: 16,
-    lineHeight: 20
+    fontSize: 16
   },
-  author: {
+  gallery_author: {
     color: '#888',
-    fontSize: 14,
-    lineHeight: 20
+    fontSize: 14
   },
   loader: {
     flex: 1,
-    justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   }
 });
 
-export default Gallery;
+export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
