@@ -5,6 +5,13 @@ export function fetchHasErrored(bool) {
   };
 }
 
+export function fetchHasErroredTest(bool) {
+  return {
+    type: 'FETCH_HAS_ERRORED',
+    hasErrored: bool
+  };
+}
+
 export function fetchIsLoading(bool) {
   return {
     type: 'FETCH_IS_LOADING',
