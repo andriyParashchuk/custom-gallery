@@ -1,5 +1,5 @@
 # gallery-react-native
-<h2>Installation</h2>
+<h2>Installation test</h2>
 <ul>
 <li>Running <code>npm install</code> in the app's root directory will install everything you need for development.</li>
 </ul>
