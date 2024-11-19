@@ -20,5 +20,23 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
 });
+const styles1 = StyleSheet.create({
+  detail_wrapper: {
+    flexGrow: 1
+  },
+  detail_img: {
+    flexGrow: 1
+  },
+});
+
+const styles2 = StyleSheet.create({
+  detail_wrapper: {
+    flexGrow: 1
+  },
+  detail_img: {
+    flexGrow: 1
+  },
+});
+
 
 export default Detail;

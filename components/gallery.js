@@ -75,6 +75,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 15
   },
+  gallery_item: {
+    flexDirection: 'row',
+    marginBottom: 15
+  },
   gallery_img: {
     width: '50%',
     height: 150
