@@ -5,5 +5,5 @@
 </ul>
 <h2>Development Server</h2>
 <ul>
-<li><code>react-native run-android</code> will run the app's at Android Studio</li>
+<li><code>react-native run-android</code> will run the app's at Android Studio test</li>
 </ul>
